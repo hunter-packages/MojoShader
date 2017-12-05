@@ -1,28 +1,5 @@
-#
-# Copyright (c) 2008-2016 the Urho3D project.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
-
-cmake_minimum_required(VERSION 3.0)
-
-project(MojoShader VERSION 1.0.0)
+cmake_minimum_required(VERSION 3.2)
+project(mojoshader VERSION 0.0.1)
 
 set(TARGET_SRCS
   mojoshader.c
@@ -34,15 +11,13 @@ set(TARGET_SRCS
   mojoshader_preprocessor.c
   )
 
-if (MSVC)
+if(MSVC)
   add_definitions (-D_CRT_SECURE_NO_WARNINGS=1 -TP)
-endif (MSVC)
+endif()
 
-add_library(MojoShader "${TARGET_SRCS}")
+add_library(mojoshader "${TARGET_SRCS}")
 
 #### install
-
-set(TARGET_PUBLIC_HDRS mojoshader.h)
 
 set(config_install_dir "lib/cmake/${PROJECT_NAME}")
 set(include_install_dir "include")
@@ -52,7 +27,7 @@ set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 # Configuration
 set(version_config "${generated_dir}/${PROJECT_NAME}ConfigVersion.cmake")
 set(project_config "${generated_dir}/${PROJECT_NAME}Config.cmake")
-set(targets_export_name "${PROJECT_NAME}Targets")
+set(TARGETS_EXPORT_NAME "${PROJECT_NAME}Targets")
 set(namespace "${PROJECT_NAME}::")
 
 include(CMakePackageConfigHelpers)
@@ -68,20 +43,18 @@ configure_package_config_file(
   )
 
 install(
-  TARGETS MojoShader
-  EXPORT "${targets_export_name}"
+  TARGETS mojoshader
+  EXPORT "${TARGETS_EXPORT_NAME}"
   LIBRARY DESTINATION "lib"
   ARCHIVE DESTINATION "lib"
   RUNTIME DESTINATION "bin"
   INCLUDES DESTINATION "${include_install_dir}"
   )
 
-foreach(HEADER ${TARGET_PUBLIC_HDRS})
-  install(
-    FILES "${CMAKE_CURRENT_SOURCE_DIR}/${HEADER}"
-    DESTINATION "${include_install_dir}/${PROJECT_NAME}"
-    )
-endforeach()
+install(
+  FILES mojoshader.h
+  DESTINATION "${include_install_dir}/${PROJECT_NAME}"
+)
 
 install(
   FILES "${project_config}" "${version_config}"
@@ -89,7 +62,7 @@ install(
   )
 
 install(
-  EXPORT "${targets_export_name}"
+  EXPORT "${TARGETS_EXPORT_NAME}"
   NAMESPACE "${namespace}"
   DESTINATION "${config_install_dir}"
   )
